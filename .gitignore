@@ -1,0 +1,3 @@
+i*.iml
+**/idea
+**/*.gitignore
