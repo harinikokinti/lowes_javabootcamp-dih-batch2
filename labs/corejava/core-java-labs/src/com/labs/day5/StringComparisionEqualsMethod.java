@@ -1,6 +1,8 @@
 package com.labs.day5;
 /*
 equals()  method compares the actual value or content present in the string variables
+
+
  */
 
 public class StringComparisionEqualsMethod {
@@ -18,6 +20,7 @@ public class StringComparisionEqualsMethod {
         String str5 = "SIVA";
         System.out.println(str1.equals(str5)); // false
         System.out.println(str1.equalsIgnoreCase(str5)); // true
+
 
 
 

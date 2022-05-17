@@ -17,5 +17,29 @@ public class StringComparisionCompareToMethod {
         System.out.println(str1.compareTo(str3)); // returns 0 , though str1 == str3 , it checks the value of the strings,
                                 // equals() and compareTo()  have little bit logic inside the classes, character comparision
         System.out.println(str1.compareTo(str4)); // returns 3
+
+        String s1="hello";
+        String s2="hello";
+        String s3="meklo";
+        String s4="hemlo";
+        String s5="flag";
+        System.out.println(s1.compareTo(s2));//0 because both are equal
+        System.out.println(s1.compareTo(s3));//-5 because "h" is 5 times lower than "m"
+        System.out.println(s1.compareTo(s4));//-1 because "l" is 1 times lower than "m"
+        System.out.println(s1.compareTo(s5));//2 because "h" is 2 times greater than "f"
+
+        /*
+        While comparing with empty string, the method returns the length of the string
+        if 1st string is empty, the method returns negative
+        if 2nd string is empty, the method retuns positve
+
+
+         */
+        String s6 = "";
+
+        System.out.println(s1.compareTo(s6)); // 5  (length of s1 ="hello"
+        System.out.println(s6.compareTo(s5)); // -4 (length of s5 = "flag"
+
+
     }
 }
