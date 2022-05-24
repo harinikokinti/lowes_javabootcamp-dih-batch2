@@ -1,14 +1,15 @@
-package com.empapp.model;
+package com.labs.java.collection;
 
-public class Employee {
+public class Employee implements Comparable<Employee> {
     private int empId;
     private String name;
     private String age;
     private String designation;
     private String department;
     private String country;
-/*
+
     public Employee() {
+
     }
 
     public Employee(int empId, String name, String age, String designation, String department, String country) {
@@ -18,8 +19,7 @@ public class Employee {
         this.designation = designation;
         this.department = department;
         this.country = country;
-    } */
-
+    }
     public int getEmpId() {
         return empId;
     }
@@ -67,4 +67,23 @@ public class Employee {
     public void setCountry(String country) {
         this.country = country;
     }
+
+    @Override
+    public String toString() {
+        return
+                this.empId + " " +
+                this.name + " " +
+                this.age + " " +
+                this.designation + " " +
+                this.department + " " +
+                this. country
+                ;
+    }
+
+    @Override
+    public int compareTo(Employee emp) {
+        return this.getEmpId() - emp.getEmpId();
+    }
+
+
 }
