@@ -2,14 +2,15 @@ package com.empapp;
 
 import com.empapp.exception.EmployeeNotFoundException;
 import com.empapp.model.Employee;
-import com.empapp.service.EmployeeServiceArrImpl;
+import com.empapp.service.EmployeeServiceColImpl;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class EmployeeManagementMain {
     public static void main(String[] args) {
-        EmployeeServiceArrImpl empService = new EmployeeServiceArrImpl();
+        EmployeeServiceColImpl empService = new EmployeeServiceColImpl();
         Scanner sc = new Scanner(System.in);
         do {
             System.out.println();
@@ -62,7 +63,7 @@ public class EmployeeManagementMain {
                     }
                     break;
                 case 5: // View all Employees
-                    Employee[] employees = empService.getAll();
+                    List<Employee> employees = empService.getAll();
                     printEmployees(employees);
                     break;
                 case 6:
@@ -107,12 +108,10 @@ public class EmployeeManagementMain {
                 employee.getCountry());
     }
 
-    static void printEmployees(Employee[] employees) {
+    static void printEmployees(List<Employee> employees) {
         printHeader();
-        for (int i = 0; i < employees.length; i++) {
-            if (employees[i] != null) {
-                printEmployee(employees[i]);
-            }
+        for (Employee employee : employees) {
+            printEmployee(employee);
         }
     }
 
