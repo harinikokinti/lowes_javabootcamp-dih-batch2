@@ -2,18 +2,22 @@ package com.empapp;
 
 import com.empapp.exception.EmployeeNotFoundException;
 import com.empapp.model.Employee;
-import com.empapp.service.EmployeeServiceColImpl;
+import com.empapp.service.EmployeeServiceStatsImpl;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.*;
 
 public class EmployeeManagementMain {
+    public static EmployeeServiceStatsImpl empService;
+
     public static void main(String[] args) {
-        EmployeeServiceColImpl empService = new EmployeeServiceColImpl();
+        ExecutorService exs = Executors.newFixedThreadPool(5);
+        empService = new EmployeeServiceStatsImpl();
         Scanner sc = new Scanner(System.in);
         do {
             System.out.println();
@@ -73,15 +77,30 @@ public class EmployeeManagementMain {
                     printEmployees(employees);
                     break;
                 case 6: // Print Statistics
-                    return;
+                    printStatistics();
+                    break;
                 case 7: // Import
+                    Future<Boolean> importFuture = exs.submit(() -> {
+                        Thread.sleep(2000);
+                        System.out.println("Import Process on Thread name: " + Thread.currentThread().getName());
+                        empService.bulkImport();
+                        return true;
+                    });
                     break;
                 case 8: // Export
+                    Future<Boolean> exportFuture = exs.submit(() -> {
+                        Thread.sleep(2000);
+                        System.out.println("Export Process on Thread name: " + Thread.currentThread().getName());
+                        empService.bulkExport();
+                        return true;
+                    });
                     break;
                 case 9:
+                    exs.shutdown();
                     return;
             }
         } while (true);
+
     }
 
     static int readEmployeeId() {
@@ -95,6 +114,7 @@ public class EmployeeManagementMain {
                 System.out.println("Sorry you have entered invalid Employee ID");
             }
         } while (true);
+
     }
 
     static Employee readEmployee() {
@@ -103,19 +123,61 @@ public class EmployeeManagementMain {
         System.out.println("Enter the employee details: ");
         System.out.println("Enter employee Name:  ");
         emp.setName(sc.next());
-        System.out.println("Enter employee Age: ");
-        emp.setAge(sc.next());
+
+        // validate age
+        boolean valAgeStatus = true;
+        do {
+            try {
+                System.out.println("Enter employee Age: ");
+                String message = "Invalid age: Enter age > 20 and < 60 : ";
+                emp.setAge(sc.nextInt());
+                valAgeStatus = empService.validate(emp, message, (employee) -> employee.getAge() >= 20 && employee.getAge() <= 60);
+            } catch (InputMismatchException e) {
+                System.out.println("Sorry you have entered invalid Age ");
+                sc.next();  // if exception comes, we should move to the next token
+                // https://stackoverflow.com/questions/6374623/java-util-scanner-why-my-nextdouble-does-not-prompt
+                valAgeStatus = false;
+            }
+        } while (!valAgeStatus);
+
         System.out.println("Enter employee Designation: ");
         emp.setDesignation(sc.next());
         System.out.println("Enter employee Department: ");
         emp.setDepartment(sc.next());
         System.out.println("Enter employee Country: ");
         emp.setCountry(sc.next());
-        System.out.println("Enter employee Salary: ");
-        emp.setSalary(sc.nextDouble());
-        System.out.println("Enter Date of joining (doj) in dd-mm-yyyy  format: ");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");  // doubt
-        emp.setDoj((LocalDate.parse(sc.next(), formatter)));
+
+        // validate Salary
+        boolean valSalStatus = true;
+        do {
+            try {
+                System.out.println("Enter employee Salary: ");
+                String message = "Invalid salary: Enter salary > 0 ";
+                emp.setSalary(sc.nextDouble());
+                valSalStatus = empService.validate(emp, message, (employee) -> employee.getSalary() > 0);
+            } catch (InputMismatchException e) {
+                System.out.println("Sorry you have entered invalid Salary ");
+                sc.next();  // if exception comes, we should move to the next token
+                // https://stackoverflow.com/questions/6374623/java-util-scanner-why-my-nextdouble-does-not-prompt
+                valSalStatus = false;
+            }
+        } while (!valSalStatus);
+
+
+        // validate Date of Joining
+        boolean valDojStatus = true;
+        do {
+            try {
+                System.out.println("Enter Date of joining (doj) in dd-mm-yyyy  format: ");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");  // doubt
+                LocalDate doj = LocalDate.parse(sc.next(), formatter);
+                emp.setDoj(doj);
+                valDojStatus = true;
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid Date format, Enter date in dd-mm-yyyy  format");
+                valDojStatus = false;
+            }
+        } while (!valDojStatus);
         return emp;
     }
 
@@ -137,6 +199,26 @@ public class EmployeeManagementMain {
         System.out.println("  EmpId     Name     Age        Designation         Department      Country      Salary       DOJ                 CreatedTime       " +
                 "               ModifiedTime");
     }
+
+    static void printStatistics() {
+        System.out.println(" Number of Employees older than forty years:  " +
+                empService.getEmployeeCountAgeGreaterThan(e->e.getAge() > 40 ));
+        System.out.println("List of Employee Ids older than 40 years: " +
+                empService.getEmployeeIdsAgeGreaterThan(40));
+        System.out.println("Employee count by Department: " +
+                empService.getEmployeeCountByDepartment());
+        System.out.println("Employee count by Department sorted: " +
+                empService.getEmployeeCountByDepartmentOrdered());
+        System.out.println("Average Employee age by Department: " +
+                empService.getAvgEmployeeAgeByDept());
+        System.out.println("List Departments have more than 3 employees: " +
+                empService.getDepartmentsHaveEmployeesMoreThan(3));
+        System.out.println("List Employees starts with " + "'R':" +
+                empService.getEmployeeNamesStartsWith("R"));
+        System.out.println("Average Employee Service by Department: " +
+                empService.getAvgEmployeeServiceByDept());
+    }
+
 }
 
 

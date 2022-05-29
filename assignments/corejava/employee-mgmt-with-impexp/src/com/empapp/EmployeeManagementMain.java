@@ -2,18 +2,19 @@ package com.empapp;
 
 import com.empapp.exception.EmployeeNotFoundException;
 import com.empapp.model.Employee;
-import com.empapp.service.EmployeeServiceColImpl;
+import com.empapp.service.EmployeeServiceImpexpImpl;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.*;
 
 public class EmployeeManagementMain {
     public static void main(String[] args) {
-        EmployeeServiceColImpl empService = new EmployeeServiceColImpl();
+        ExecutorService exs = Executors.newFixedThreadPool(5);
+        EmployeeServiceImpexpImpl empService = new EmployeeServiceImpexpImpl();
         Scanner sc = new Scanner(System.in);
         do {
             System.out.println();
@@ -75,13 +76,33 @@ public class EmployeeManagementMain {
                 case 6: // Print Statistics
                     return;
                 case 7: // Import
+                    Future<Boolean> importFuture = exs.submit(new Callable<Boolean>() {
+                        @Override
+                        public Boolean call() throws Exception {
+                            Thread.sleep(2000);
+                            System.out.println("Import Process on Thread name: " + Thread.currentThread().getName());
+                            empService.bulkImport();
+                            return true;
+                        }
+                    });
                     break;
                 case 8: // Export
+                    Future<Boolean> exportFuture = exs.submit(new Callable<Boolean>() {
+                        @Override
+                        public Boolean call() throws Exception {
+                            Thread.sleep(2000);
+                            System.out.println("Export Process on Thread name: " + Thread.currentThread().getName());
+                            empService.bulkExport();
+                            return true;
+                        }
+                    });
                     break;
                 case 9:
+                    exs.shutdown();
                     return;
             }
         } while (true);
+
     }
 
     static int readEmployeeId() {
@@ -95,6 +116,8 @@ public class EmployeeManagementMain {
                 System.out.println("Sorry you have entered invalid Employee ID");
             }
         } while (true);
+
+
     }
 
     static Employee readEmployee() {
@@ -104,7 +127,7 @@ public class EmployeeManagementMain {
         System.out.println("Enter employee Name:  ");
         emp.setName(sc.next());
         System.out.println("Enter employee Age: ");
-        emp.setAge(sc.next());
+        emp.setAge(sc.nextInt());
         System.out.println("Enter employee Designation: ");
         emp.setDesignation(sc.next());
         System.out.println("Enter employee Department: ");
@@ -137,6 +160,7 @@ public class EmployeeManagementMain {
         System.out.println("  EmpId     Name     Age        Designation         Department      Country      Salary       DOJ                 CreatedTime       " +
                 "               ModifiedTime");
     }
+
 }
 
 

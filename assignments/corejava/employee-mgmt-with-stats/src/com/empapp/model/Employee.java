@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 public class Employee {
     private int empId;
     private String name;
-    private String age;
+    private int age;
     private String designation;
     private String department;
     private String country;
@@ -45,11 +45,11 @@ public class Employee {
         this.name = name;
     }
 
-    public String getAge() {
+    public int getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(int age) {
         this.age = age;
     }
 

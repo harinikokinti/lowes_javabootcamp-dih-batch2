@@ -3,6 +3,7 @@ package com.empapp.service;
 import com.empapp.exception.EmployeeNotFoundException;
 import com.empapp.model.Employee;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,7 @@ public class EmployeeServiceColImpl implements EmployeeService {
     @Override
     public boolean create(Employee emp) {
         emp.setEmpId(empIdSequence++);
+        emp.setCreatedTime(LocalDateTime.now());
         employees.put(emp.getEmpId(), emp);
         return true;
     }
@@ -28,11 +30,9 @@ public class EmployeeServiceColImpl implements EmployeeService {
     @Override
     public boolean update(Employee empNew) {
         Employee empToUpdate = this.findById(empNew.getEmpId());
-        empToUpdate.setName(empNew.getName());
-        empToUpdate.setAge(empNew.getAge());
-        empToUpdate.setDesignation(empNew.getDesignation());
-        empToUpdate.setDepartment(empNew.getDepartment());
-        empToUpdate.setCountry(empNew.getCountry());
+        empNew.setModifiedTime(LocalDateTime.now());
+        empNew.setCreatedTime(empToUpdate.getCreatedTime());
+        employees.put(empToUpdate.getEmpId(), empNew);
         return true;
     }
 

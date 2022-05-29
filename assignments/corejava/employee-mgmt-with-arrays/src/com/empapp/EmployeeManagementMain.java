@@ -89,15 +89,15 @@ public class EmployeeManagementMain {
         Employee emp = new Employee();
         System.out.println("Enter the employee details: ");
         System.out.println("Enter employee Name:  ");
-        emp.setName(sc.next());
+        emp.setName(sc.nextLine());
         System.out.println("Enter employee Age: ");
-        emp.setAge(sc.next());
+        emp.setAge(sc.nextLine());
         System.out.println("Enter employee Designation: ");
-        emp.setDesignation(sc.next());
+        emp.setDesignation(sc.nextLine());
         System.out.println("Enter employee Department: ");
-        emp.setDepartment(sc.next());
+        emp.setDepartment(sc.nextLine());
         System.out.println("Enter employee Country: ");
-        emp.setCountry(sc.next());
+        emp.setCountry(sc.nextLine());
         return emp;
     }
 

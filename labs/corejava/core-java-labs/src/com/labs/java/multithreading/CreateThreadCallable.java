@@ -30,16 +30,16 @@ public class CreateThreadCallable implements Callable<String> {
         ExecutorService exs = Executors.newFixedThreadPool(5); // creates 5 threads
 //        ExecutorService exs = Executors.newCachedThreadPool(); // it creates 2 threads and reuse them
 //        ExecutorService exs = Executors.newSingleThreadExecutor(); // single Thread
-        Future<String> f1 = exs.submit(c1);
-        System.out.println(f1.get());
-
-        // approach 2
-        Future<String> f2 = exs.submit(new SampleThread());
-        System.out.println(f2.get());
-
-        //approach 3
-        Future<String> f3 =exs.submit(new CreateThreadCallable());
-        System.out.println(f3.get());
+//        Future<String> f1 = exs.submit(c1);
+//        System.out.println(f1.get());
+//
+//        // approach 2
+//        Future<String> f2 = exs.submit(new SampleThread());
+//        System.out.println(f2.get());
+//
+//        //approach 3
+//        Future<String> f3 =exs.submit(new CreateThreadCallable());
+//        System.out.println(f3.get());
 
         //approach 4
         Future<String> f4 =exs.submit(new Callable<String>() {
@@ -52,6 +52,8 @@ public class CreateThreadCallable implements Callable<String> {
             }
         });
         System.out.println(f4.get());
+
+        exs.shutdown();
     }
 
     @Override
@@ -61,4 +63,5 @@ public class CreateThreadCallable implements Callable<String> {
         }
         return "Thread 3 Execution completed ";
     }
+
 }
