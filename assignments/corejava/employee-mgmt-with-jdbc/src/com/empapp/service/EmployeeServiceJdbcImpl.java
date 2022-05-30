@@ -16,8 +16,7 @@ import java.util.stream.Collectors;
 
 public class EmployeeServiceJdbcImpl implements EmployeeService {
     EmployeeDaoJdbcImpl employeeDaoJdbc = new EmployeeDaoJdbcImpl();
-    Map<Integer, Employee> employees = new HashMap<>();
-    Comparator<Employee> sortByNameComparator = (o1, o2) -> o1.getName().compareTo(o2.getName()); // to sort by Employee name
+    List<Employee> employees = null;
 
     @Override
     public boolean create(Employee emp) {
@@ -66,15 +65,14 @@ public class EmployeeServiceJdbcImpl implements EmployeeService {
 
     private Employee buildEmployee(String[] tokens) {
         Employee emp = new Employee();
-        emp.setEmpId(Integer.parseInt(tokens[0]));
-        emp.setName(tokens[1]);
-        emp.setAge(Integer.parseInt(tokens[2]));
-        emp.setDesignation(tokens[3]);
-        emp.setDepartment(tokens[4]);
-        emp.setCountry(tokens[5]);
-        emp.setSalary(Double.parseDouble(tokens[6]));
-        emp.setDoj(LocalDate.parse(tokens[7], DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-        emp.setCreatedTime(LocalDateTime.parse(tokens[8]));
+        emp.setName(tokens[0]);
+        emp.setAge(Integer.parseInt(tokens[1]));
+        emp.setDesignation(tokens[2]);
+        emp.setDepartment(tokens[3]);
+        emp.setCountry(tokens[4]);
+        emp.setSalary(Double.parseDouble(tokens[5]));
+        emp.setDoj(LocalDate.parse(tokens[6], DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        emp.setCreatedTime(LocalDateTime.parse(tokens[7]));
         return emp;
     }
 
@@ -113,11 +111,9 @@ public class EmployeeServiceJdbcImpl implements EmployeeService {
 
     // Print Statistics Methods
 
-    public Map<Integer, Employee> empCollection() {
-        employees = new HashMap<>();
-        List<Employee> employeeList = getAll();
-        for (Employee e : employeeList) {
-            employees.put(e.getEmpId(), e);
+    public List<Employee> empCollection() {
+        if (employees == null) {
+            employees = getAll();
         }
         return employees;
     }
@@ -125,12 +121,13 @@ public class EmployeeServiceJdbcImpl implements EmployeeService {
     @Override
     public long getEmployeeCountAgeGreaterThan(Predicate<Employee> condition) {
         employees = empCollection();
-        return employees.values().stream().filter(condition).count();
+        return getAll().stream().filter(condition).count();
+        //    return employees.values().stream().filter(condition).count();
     }
 
     @Override
     public List<Integer> getEmployeeIdsAgeGreaterThan(int age) {
-        return employees.values()
+        return employees
                 .stream()
                 .filter(employee -> employee.getAge() > age)
                 .map(p -> p.getEmpId()).collect(Collectors.toList());
@@ -138,28 +135,28 @@ public class EmployeeServiceJdbcImpl implements EmployeeService {
 
     @Override
     public Map<String, Long> getEmployeeCountByDepartment() {
-        return employees.values()
+        return employees
                 .stream()
                 .collect(Collectors.groupingBy(Employee::getDepartment, Collectors.counting()));
     }
 
     @Override
     public Map<String, Long> getEmployeeCountByDepartmentOrdered() {
-        return employees.values()
+        return employees
                 .stream()
                 .collect(Collectors.groupingBy(Employee::getDepartment, TreeMap::new, Collectors.counting()));
     }
 
     @Override
     public Map<String, Double> getAvgEmployeeAgeByDept() {
-        return employees.values()
+        return employees
                 .stream()
                 .collect(Collectors.groupingBy(Employee::getDepartment, Collectors.averagingDouble(Employee::getAge)));
     }
 
     @Override
     public List<String> getDepartmentsHaveEmployeesMoreThan(int criteria) {
-        return employees.values()
+        return employees
                 .stream()
                 .collect(Collectors.groupingBy(Employee::getDepartment, Collectors.counting()))
                 .entrySet()
@@ -171,7 +168,7 @@ public class EmployeeServiceJdbcImpl implements EmployeeService {
 
     @Override
     public List<String> getEmployeeNamesStartsWith(String prefix) {
-        return employees.values()
+        return employees
                 .stream()
                 .map(Employee::getName)
                 .filter(name -> name.startsWith(prefix))
@@ -180,7 +177,7 @@ public class EmployeeServiceJdbcImpl implements EmployeeService {
 
     @Override
     public Map<String, Double> getAvgEmployeeServiceByDept() {
-        return employees.values()
+        return employees
                 .stream()
                 .collect(Collectors.groupingBy(Employee::getDepartment, Collectors.averagingInt(employees -> {
                     Period period = Period.between(employees.getDoj(), LocalDate.now());

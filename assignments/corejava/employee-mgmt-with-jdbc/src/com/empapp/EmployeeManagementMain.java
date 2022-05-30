@@ -14,6 +14,7 @@ import java.util.concurrent.*;
 
 public class EmployeeManagementMain {
     public static EmployeeServiceJdbcImpl empService;
+    public static Employee emp;
 
     public static void main(String[] args) {
         ExecutorService exs = Executors.newFixedThreadPool(5);
@@ -40,21 +41,32 @@ public class EmployeeManagementMain {
                     break;
                 case 2: // View Employee
                     int empId = readEmployeeId();
-                        Employee emp = empService.get(empId);
+                    try {
+                        emp = empService.get(empId);
                         printHeader();
                         printEmployee(emp);
-
+                    } catch (EmployeeNotFoundException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 3: // Update employee
                     int empIdToUpdate = readEmployeeId();
                     Employee empNew = readEmployee();
                     empNew.setEmpId(empIdToUpdate);
-                    empService.update(empNew);
-                    System.out.println("Employee has been updated Succesfully ");
+                    try {
+                        empService.update(empNew);
+                        System.out.println("Employee has been updated Succesfully ");
+                    } catch (EmployeeNotFoundException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 4: // Delete Employee
                     int empIDToDelete = readEmployeeId();
-                    empService.delete(empIDToDelete);
+                    try {
+                        empService.delete(empIDToDelete);
+                    } catch (EmployeeNotFoundException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 5: // View all Employees
                     List<Employee> employees = empService.getAll();
@@ -166,10 +178,10 @@ public class EmployeeManagementMain {
     }
 
     static void printEmployee(Employee employee) {
-        System.out.println("\t" + employee.getEmpId() + "\t" + employee.getName() + "\t" + employee.getAge() + "\t" +
-                employee.getDesignation() + "\t" + employee.getDepartment() + "\t" +
-                employee.getCountry() + "\t" + employee.getSalary() + "\t" + employee.getDoj() + "\t" +
-                employee.getCreatedTime() + "\t" + employee.getModifiedTime());
+        System.out.println(employee.getEmpId() + "\t" + employee.getName() + "\t\t" + employee.getAge() + "\t\t\t" +
+                employee.getDesignation() + "\t\t" + employee.getDepartment() + "\t\t" +
+                employee.getCountry() + "\t\t" + employee.getSalary() + "\t\t\t" + employee.getDoj() + "\t\t" +
+                employee.getCreatedTime() + "\t\t\t" + employee.getModifiedTime());
     }
 
     static void printEmployees(List<Employee> employees) {
@@ -180,7 +192,7 @@ public class EmployeeManagementMain {
     }
 
     static void printHeader() {
-        System.out.println("EmpId \t Name \t Age \t Designation \t Department \t Country \t Salary \t Doj \t CreatedTime \t ModifiedTime");
+        System.out.println("EmpId \t Name \t Age \t Designation \t Department \t Country \t Salary \t Doj \t\t CreatedTime \t\t\t ModifiedTime");
     }
 
     static void printStatistics() {
@@ -196,8 +208,8 @@ public class EmployeeManagementMain {
                 empService.getAvgEmployeeAgeByDept());
         System.out.println("List Departments have more than 3 employees: " +
                 empService.getDepartmentsHaveEmployeesMoreThan(3));
-        System.out.println("List Employees starts with " + "'R':" +
-                empService.getEmployeeNamesStartsWith("R"));
+        System.out.println("List Employees starts with " + "'S':" +
+                empService.getEmployeeNamesStartsWith("S"));
         System.out.println("Average Employee Service by Department: " +
                 empService.getAvgEmployeeServiceByDept());
     }

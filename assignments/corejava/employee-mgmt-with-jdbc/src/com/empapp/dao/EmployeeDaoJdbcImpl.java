@@ -48,7 +48,7 @@ public class EmployeeDaoJdbcImpl implements EmployeeDao {
             pstmt.setString(4, emp.getDepartment());
             pstmt.setString(5, emp.getCountry());
             pstmt.setDouble(6, emp.getSalary());
-            pstmt.setDate(7, Date.valueOf(emp.getDoj()));  // convret LocalDate to Date
+            pstmt.setDate(7, Date.valueOf(emp.getDoj()));  // convert LocalDate to Date
             pstmt.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now())); // convert LocalDateTime to Timestamp
             int rowsInserted = pstmt.executeUpdate();
             return rowsInserted > 0;
@@ -71,7 +71,7 @@ public class EmployeeDaoJdbcImpl implements EmployeeDao {
         try {
             con = getConnection();
             String updateQuery = "UPDATE employee SET id = ? , name = ? , age = ? , designation = ? , department = ?" +
-                    " , country = ? , salary = ? , doj = ? , created_time = ? , modified_time = ?  WHERE id = ?";
+                    " , country = ? , salary = ? , doj = ? , modified_time = ?  WHERE id = ?";
             pstmt = con.prepareStatement(updateQuery);
             pstmt.setInt(1, emp.getEmpId());
             pstmt.setString(2, emp.getName());
@@ -80,13 +80,18 @@ public class EmployeeDaoJdbcImpl implements EmployeeDao {
             pstmt.setString(5, emp.getDepartment());
             pstmt.setString(6, emp.getCountry());
             pstmt.setDouble(7, emp.getSalary());
-            pstmt.setDate(8, Date.valueOf(emp.getDoj()));  // convret LocalDate to Date
-            pstmt.setTimestamp(9, Timestamp.valueOf(LocalDateTime.now())); // convert LocalDateTime to Timestamp
-            pstmt.setTimestamp(10, Timestamp.valueOf(LocalDateTime.now()));
-            pstmt.setInt(11, emp.getEmpId());
+            pstmt.setDate(8, Date.valueOf(emp.getDoj()));  // convert LocalDate to Date
+            //pstmt.setTimestamp(9, Timestamp.valueOf(LocalDateTime.now())); // convert LocalDateTime to Timestamp   , no need to set
+            pstmt.setTimestamp(9, Timestamp.valueOf(LocalDateTime.now()));
+            pstmt.setInt(10, emp.getEmpId());
 
             int updateCount = pstmt.executeUpdate();
-            System.out.println(updateCount + " Employee(s) updated");
+            if (updateCount > 0) {
+                System.out.println(updateCount + " records updated ");
+            } else {
+                throw new EmployeeNotFoundException("Sorry Employee was not found in the database");
+            }
+
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -96,7 +101,6 @@ public class EmployeeDaoJdbcImpl implements EmployeeDao {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
         }
         return false;
     }
@@ -110,7 +114,12 @@ public class EmployeeDaoJdbcImpl implements EmployeeDao {
             pstmt = con.prepareStatement(deleteQuery);
             pstmt.setInt(1, empId);
             int deleteCount = pstmt.executeUpdate();
-            System.out.println(deleteCount + " Employee(s) deleted");
+            if (deleteCount > 0) {
+                System.out.println(deleteCount + " Employee(s) deleted");
+            } else {
+                throw new EmployeeNotFoundException("Sorry Employee was not found");
+            }
+
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -127,7 +136,7 @@ public class EmployeeDaoJdbcImpl implements EmployeeDao {
 
     @Override
     public Employee get(int empId) throws EmployeeNotFoundException {
-        Employee emp = new Employee();
+        Employee emp = null;
         try {
             con = getConnection();
             String query = "SELECT id,name,age,designation,department,country,salary,doj,created_time,modified_time FROM employee WHERE id = ? ";
@@ -136,6 +145,7 @@ public class EmployeeDaoJdbcImpl implements EmployeeDao {
             rs = pstmt.executeQuery();
             System.out.println("Query executed Successfully: " + query);
             while (rs.next()) {
+                emp = new Employee();
                 emp.setEmpId(rs.getInt("id"));
                 emp.setName(rs.getString("name"));
                 emp.setAge(rs.getInt("age"));
@@ -151,6 +161,10 @@ public class EmployeeDaoJdbcImpl implements EmployeeDao {
                     emp.setModifiedTime(modifiedTime.toLocalDateTime());
                 }
             }
+            if (emp == null) {
+                throw new EmployeeNotFoundException("Sorry Employee was not found in the database");
+            }
+
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
