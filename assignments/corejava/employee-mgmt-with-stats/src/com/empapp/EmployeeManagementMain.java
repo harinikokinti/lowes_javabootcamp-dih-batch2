@@ -182,10 +182,10 @@ public class EmployeeManagementMain {
     }
 
     static void printEmployee(Employee employee) {
-        System.out.println("    " + employee.getEmpId() + "       " + employee.getName() + "      " + employee.getAge() + "        " +
-                employee.getDesignation() + "           " + employee.getDepartment() + "             " +
-                employee.getCountry() + "         " + employee.getSalary() + "            " + employee.getDoj() + "         " +
-                employee.getCreatedTime() + "           " + employee.getModifiedTime());
+        System.out.println(employee.getEmpId() + "\t" + employee.getName() + "\t\t" + employee.getAge() + "\t\t\t" +
+                employee.getDesignation() + "\t\t" + employee.getDepartment() + "\t\t" +
+                employee.getCountry() + "\t\t" + employee.getSalary() + "\t\t\t" + employee.getDoj() + "\t\t" +
+                employee.getCreatedTime() + "\t\t\t" + employee.getModifiedTime());
     }
 
     static void printEmployees(List<Employee> employees) {
@@ -196,8 +196,7 @@ public class EmployeeManagementMain {
     }
 
     static void printHeader() {
-        System.out.println("  EmpId     Name     Age        Designation         Department      Country      Salary       DOJ                 CreatedTime       " +
-                "               ModifiedTime");
+        System.out.println("EmpId \t Name \t Age \t Designation \t Department \t Country \t Salary \t Doj \t\t CreatedTime \t\t\t ModifiedTime");
     }
 
     static void printStatistics() {
@@ -213,8 +212,8 @@ public class EmployeeManagementMain {
                 empService.getAvgEmployeeAgeByDept());
         System.out.println("List Departments have more than 3 employees: " +
                 empService.getDepartmentsHaveEmployeesMoreThan(3));
-        System.out.println("List Employees starts with " + "'R':" +
-                empService.getEmployeeNamesStartsWith("R"));
+        System.out.println("List Employees starts with " + "'S':" +
+                empService.getEmployeeNamesStartsWith("S"));
         System.out.println("Average Employee Service by Department: " +
                 empService.getAvgEmployeeServiceByDept());
     }

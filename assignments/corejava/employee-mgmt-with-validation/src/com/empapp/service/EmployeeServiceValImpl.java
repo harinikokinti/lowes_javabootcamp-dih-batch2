@@ -73,7 +73,7 @@ public class EmployeeServiceValImpl implements EmployeeService {
         BufferedReader in = null;
         String line = null;
         try {
-            in = new BufferedReader(new FileReader("/Users/dhilli/codebase/lowes_javabootcamp-dih-batch2/assignments/corejava/employee-mgmt-with-impexp/src/com/empapp/input.txt"));
+            in = new BufferedReader(new FileReader("/Users/dhilli/codebase/lowes_javabootcamp-dih-batch2/assignments/corejava/employee-mgmt-with-validation/src/com/empapp/input.txt"));
             while ((line = in.readLine()) != null) {
                 String[] tokens = line.split(",");
                 Employee emp = new Employee();

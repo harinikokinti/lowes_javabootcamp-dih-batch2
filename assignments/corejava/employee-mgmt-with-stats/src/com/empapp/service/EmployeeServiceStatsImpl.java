@@ -4,6 +4,8 @@ import com.empapp.exception.EmployeeNotFoundException;
 import com.empapp.model.Employee;
 
 import java.io.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -166,7 +168,14 @@ public class EmployeeServiceStatsImpl implements EmployeeService {
     public Map<String, Double> getAvgEmployeeAgeByDept() {
         return employees.values()
                 .stream()
-                .collect(Collectors.groupingBy(Employee::getDepartment, Collectors.averagingDouble(Employee::getAge)));
+                .collect(Collectors.groupingBy(Employee::getDepartment, Collectors.averagingDouble(Employee::getAge)))
+                .entrySet()
+                .stream()
+                .map(entry -> {
+                    entry.setValue(roundDouble(entry.getValue())); // round double value to 2 decimal points
+                    return entry;
+                })
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));  // convert entry to map
     }
 
     @Override
@@ -192,13 +201,25 @@ public class EmployeeServiceStatsImpl implements EmployeeService {
 
     @Override
     public Map<String, Double> getAvgEmployeeServiceByDept() {
-        return  employees.values()
+
+        return employees.values()
                 .stream()
                 .collect(Collectors.groupingBy(Employee::getDepartment, Collectors.averagingInt(employees -> {
                     Period period = Period.between(employees.getDoj(), LocalDate.now());
                     return period.getYears();
-                })));
+                })))
+                .entrySet()
+                .stream()
+                .map(entry -> {
+                    entry.setValue(roundDouble(entry.getValue())); // round double value to 2 decimal points
+                    return entry;
+                })
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));  // convert entry to map
     }
 
-
+    private double roundDouble(Double value) {
+        BigDecimal val = BigDecimal.valueOf(value);  // convert double value to BigDecimal
+        val = val.setScale(2, RoundingMode.HALF_UP);  // Set scale to 2 decimal points and round to nearest big value
+        return val.doubleValue(); // convert BigDecimal to double                                        // Ex : 4.789 = 4.79
+    }
 }

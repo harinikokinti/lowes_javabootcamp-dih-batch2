@@ -23,10 +23,7 @@ public class EmployeeManagementMain {
             System.out.println("3. Update Employee");
             System.out.println("4. Delete Employee");
             System.out.println("5. View All Employees");
-            System.out.println("6. Print Statistics");
-            System.out.println("7. Import");
-            System.out.println("8. Export");
-            System.out.println("9. Exit");
+            System.out.println("6. Exit");
             System.out.println("Enter the option: ");
             int number = sc.nextInt();
             switch (number) {
@@ -72,13 +69,7 @@ public class EmployeeManagementMain {
                     List<Employee> employees = empService.getAll();
                     printEmployees(employees);
                     break;
-                case 6: // Print Statistics
-                    return;
-                case 7: // Import
-                    break;
-                case 8: // Export
-                    break;
-                case 9:
+                case 6:
                     return;
             }
         } while (true);
@@ -120,10 +111,10 @@ public class EmployeeManagementMain {
     }
 
     static void printEmployee(Employee employee) {
-        System.out.println("    " + employee.getEmpId() + "       " + employee.getName() + "      " + employee.getAge() + "        " +
-                employee.getDesignation() + "           " + employee.getDepartment() + "             " +
-                employee.getCountry() + "         " + employee.getSalary() + "            " + employee.getDoj() + "         " +
-                employee.getCreatedTime() + "           " + employee.getModifiedTime());
+        System.out.println(employee.getEmpId() + "\t" + employee.getName() + "\t\t" + employee.getAge() + "\t\t\t" +
+                employee.getDesignation() + "\t\t" + employee.getDepartment() + "\t\t" +
+                employee.getCountry() + "\t\t" + employee.getSalary() + "\t\t\t" + employee.getDoj() + "\t\t" +
+                employee.getCreatedTime() + "\t\t\t" + employee.getModifiedTime());
     }
 
     static void printEmployees(List<Employee> employees) {
@@ -134,8 +125,7 @@ public class EmployeeManagementMain {
     }
 
     static void printHeader() {
-        System.out.println("  EmpId     Name     Age        Designation         Department      Country      Salary       DOJ                 CreatedTime       " +
-                "               ModifiedTime");
+        System.out.println("EmpId \t Name \t Age \t Designation \t Department \t Country \t Salary \t Doj \t\t CreatedTime \t\t\t ModifiedTime");
     }
 }
 

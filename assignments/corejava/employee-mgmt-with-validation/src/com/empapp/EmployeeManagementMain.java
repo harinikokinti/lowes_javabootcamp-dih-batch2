@@ -119,7 +119,6 @@ public class EmployeeManagementMain {
                 System.out.println("Sorry you have entered invalid Employee ID");
             }
         } while (true);
-
     }
 
     static Employee readEmployee() {
@@ -187,10 +186,10 @@ public class EmployeeManagementMain {
     }
 
     static void printEmployee(Employee employee) {
-        System.out.println("    " + employee.getEmpId() + "       " + employee.getName() + "      " + employee.getAge() + "        " +
-                employee.getDesignation() + "           " + employee.getDepartment() + "             " +
-                employee.getCountry() + "         " + employee.getSalary() + "            " + employee.getDoj() + "         " +
-                employee.getCreatedTime() + "           " + employee.getModifiedTime());
+        System.out.println(employee.getEmpId() + "\t" + employee.getName() + "\t\t" + employee.getAge() + "\t\t\t" +
+                employee.getDesignation() + "\t\t" + employee.getDepartment() + "\t\t" +
+                employee.getCountry() + "\t\t" + employee.getSalary() + "\t\t\t" + employee.getDoj() + "\t\t" +
+                employee.getCreatedTime() + "\t\t\t" + employee.getModifiedTime());
     }
 
     static void printEmployees(List<Employee> employees) {
@@ -201,8 +200,7 @@ public class EmployeeManagementMain {
     }
 
     static void printHeader() {
-        System.out.println("  EmpId     Name     Age        Designation         Department      Country      Salary       DOJ                 CreatedTime       " +
-                "               ModifiedTime");
+        System.out.println("EmpId \t Name \t Age \t Designation \t Department \t Country \t Salary \t Doj \t\t CreatedTime \t\t\t ModifiedTime");
     }
 
 }
