@@ -22,14 +22,14 @@
 </style>
 
 <spring:url value="/" var="contextPath" htmlEscape="true" />
-<c:set var="userName" value="${sessionScope.userName}" />
+<c:set var="username" value="${sessionScope.username}" />
 
-<c:if test="${empty userName}">
+<c:if test="${empty username}">
 	<c:redirect url="/login" />
 </c:if>
 
 <body>
-	<span>Welcome <strong> <c:out value="${userName}" />
+	<span>Welcome <strong> <c:out value="${username}" />
 	</strong></span>
 
 	<h2>Update Employee</h2>
@@ -82,7 +82,7 @@
 
 			<tr height="50" align="center">
 				<td></td>
-				<td><input type="submit" value="Edit Save" />
+				<td><input type="submit" value="Save" />
 					&nbsp;&nbsp;&nbsp;&nbsp; <a href="${contextPath}/employee/list">Back</a></td>
 			</tr>
 		</table>

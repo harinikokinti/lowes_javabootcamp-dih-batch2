@@ -7,14 +7,14 @@
 </head>
 
 <spring:url value="/" var="contextPath" htmlEscape="true" />
-<c:set var="userName" value="${sessionScope.userName}" />
+<c:set var="username" value="${sessionScope.username}" />
 
-<c:if test="${empty userName}">
+<c:if test="${empty username}">
 	<c:redirect url="/login" />
 </c:if>
 
 <body>
-	<span>Welcome <strong> <c:out value="${userName}" /> </strong></span>
+	<span>Welcome <strong> <c:out value="${username}" /> </strong></span>
 	<br>
 	<h2>Employees List</h2>
 

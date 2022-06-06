@@ -9,7 +9,7 @@
 <body>
 <p> ${exception.errorMsg}</p>
 <br>
-<h2>Login</h2>
+<h2>User Registration Page</h2>
 
 <spring:url value="/" var="contextPath" htmlEscape="true" />
 
@@ -28,8 +28,8 @@
              <td><form:input path="email" /></td>
           </tr>
         <tr>
-            <td><form:label path="userName">UserName:</form:label></td>
-            <td><form:input path="userName" /></td>
+            <td><form:label path="username">UserName:</form:label></td>
+            <td><form:input path="username" /></td>
         </tr>
         <tr>
             <td><form:label path="password">Password:</form:label></td>
@@ -40,6 +40,12 @@
         <td colspan="2">
             <input type="submit" value="Register"/>
         </td>
+    </tr>
+
+    <tr>
+         <td>
+         <a href="${contextPath}">Home</a>
+         </td>
     </tr>
 </table>
 </form:form>

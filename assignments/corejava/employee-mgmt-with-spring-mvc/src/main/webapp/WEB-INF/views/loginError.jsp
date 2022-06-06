@@ -11,10 +11,13 @@
 
 <body>
 <h1>
-	Login Failed!  
+	Login Failed!
 </h1>
 
 <p> ${exception.errorMsg != null ? exception.errorMsg : exception} </p>
-<span> <a href="${contextPath}/login"> Back </a></span>
+<p> <a href="${contextPath}/login"> Back </a>  </br>
+<p> <a href="${contextPath}">Home</a>
 </body>
 </html>
+
+

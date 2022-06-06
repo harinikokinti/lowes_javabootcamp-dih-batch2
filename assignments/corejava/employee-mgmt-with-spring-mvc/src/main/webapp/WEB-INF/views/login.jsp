@@ -7,7 +7,6 @@
 </head>
 
 <body>
-<p> ${exception.errorMsg}</p>
 <br>
 <h2>Login</h2>
 
@@ -16,8 +15,8 @@
 <form:form method="POST" action="${contextPath}/authenticate">
    <table>
     <tr>
-        <td><form:label path="userName">UserName:</form:label></td>
-        <td><form:input path="userName" /></td>
+        <td><form:label path="username">UserName:</form:label></td>
+        <td><form:input path="username" /></td>
     </tr>
     <tr>
         <td><form:label path="password">Password:</form:label></td>
@@ -29,6 +28,12 @@
             <input type="submit" value="Login"/>
         </td>
     </tr>
+
+    <tr>
+         <td>
+             <a href="${contextPath}">Home</a>
+         </td>
+     </tr>
 </table>  
 </form:form>
 </body>

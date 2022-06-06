@@ -11,7 +11,8 @@
 	User Registered Successfully!
 </h1>
 
-<p> <a href="${contextPath}/login">Login</a>
+<p> <a href="${contextPath}/login">Login</a> </br>
+<p>  <a href="${contextPath}">Home</a>
 </body>
 </html>
 
