@@ -14,6 +14,8 @@
         <java-version>11</java-version>
         <org.springframework-version>5.3.20</org.springframework-version>
         <javax.servlet-api-version>4.0.0</javax.servlet-api-version>
+        <jackson.library>2.9.5</jackson.library>
+        <jaxb.library>2.3.3</jaxb.library>
         <slf4j-version>1.7.26</slf4j-version>
     </properties>
 
@@ -39,6 +41,13 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- JSON to Object mapping -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.library}</version>
+        </dependency>
+
 
         <!-- Logging -->
         <dependency>
@@ -51,6 +60,20 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>${slf4j-version}</version>
+        </dependency>
+
+        <!-- XML Parsing Support -->
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>${jaxb.library}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>${jaxb.library}</version>
+            <scope>runtime</scope>
         </dependency>
 
     </dependencies>
